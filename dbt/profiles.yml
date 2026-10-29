@@ -1,0 +1,7 @@
+dvf:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: /app/warehouse/dvf.duckdb
+      threads: 4

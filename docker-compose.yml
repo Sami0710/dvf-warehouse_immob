@@ -1,0 +1,22 @@
+services:
+  # Étape 1 : Extract + Load (télécharge DVF, filtre le Grand Est, charge dans DuckDB)
+  ingest:
+    build: .
+    volumes:
+      - .:/app
+    working_dir: /app
+    environment:
+      DUCKDB_PATH: /app/warehouse/dvf.duckdb
+      INGEST_YEARS: "2023,2024"
+    command: python ingest.py
+
+  # Étape 2 : Transform (dbt construit le schéma en étoile + lance les tests)
+  dbt:
+    build: .
+    volumes:
+      - .:/app
+    working_dir: /app/dbt
+    environment:
+      DBT_PROFILES_DIR: /app/dbt
+    entrypoint: ["dbt"]
+    command: ["build"]

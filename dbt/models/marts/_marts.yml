@@ -1,0 +1,34 @@
+version: 2
+
+models:
+  - name: fct_ventes
+    description: "Table de faits : une vente d'un logement unique (maison/appartement) dans le Grand Est."
+    columns:
+      - name: id_mutation
+        description: "Identifiant de la vente."
+        data_tests: [unique, not_null]
+      - name: code_commune
+        description: "Commune de la vente (clé vers dim_commune)."
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('dim_commune')
+              field: code_commune
+      - name: type_local
+        data_tests:
+          - accepted_values:
+              values: ['Maison', 'Appartement']
+      - name: prix_m2
+        data_tests: [not_null]
+
+  - name: dim_commune
+    description: "Dimension commune."
+    columns:
+      - name: code_commune
+        data_tests: [unique, not_null]
+
+  - name: dim_date
+    description: "Dimension date."
+    columns:
+      - name: date_jour
+        data_tests: [unique, not_null]
